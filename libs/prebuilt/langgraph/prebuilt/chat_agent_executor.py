@@ -441,7 +441,7 @@ def create_agent_node(
     if not is_dynamic_model:
         if isinstance(model, str):
             try:
-                from langchain.chat_models import (  # type: ignore[import-not-found]
+                from langchain.chat_models import (
                     init_chat_model,
                 )
             except ImportError:
@@ -469,7 +469,7 @@ def create_agent_node(
     def _resolve_model(state: Any, runtime: Runtime[ContextT]) -> LanguageModelLike:
         if is_dynamic_model:
             return get_prompt_runnable(prompt) | model(state, runtime)  # type: ignore[operator]
-        return static_model  # type: ignore[return-value]
+        return static_model
 
     async def _aresolve_model(
         state: Any, runtime: Runtime[ContextT]
@@ -479,7 +479,7 @@ def create_agent_node(
             return get_prompt_runnable(prompt) | resolved
         elif is_dynamic_model:
             return get_prompt_runnable(prompt) | model(state, runtime)  # type: ignore[operator]
-        return static_model  # type: ignore[return-value]
+        return static_model
 
     def _are_more_steps_needed(state: Any, response: BaseMessage) -> bool:
         has_tool_calls = isinstance(response, AIMessage) and bool(response.tool_calls)
@@ -507,12 +507,11 @@ def create_agent_node(
             state, "messages"
         )
         if messages is None:
-            raise ValueError(
-                f"Expected state to have a 'messages' key, got: {state!r}"
-            )
+            raise ValueError(f"Expected state to have a 'messages' key, got: {state!r}")
         _validate_chat_history(messages)
         # Produce a shallow copy with the effective messages set under 'messages'
         # so the prompt runnable can access them via state["messages"].
+        model_input: Any
         if isinstance(state, BaseModel):
             model_input = state.model_copy(update={"messages": messages})
         else:
@@ -860,7 +859,7 @@ def create_react_agent(
     if not is_dynamic_model:
         if isinstance(model, str):
             try:
-                from langchain.chat_models import (  # type: ignore[import-not-found]
+                from langchain.chat_models import (
                     init_chat_model,
                 )
             except ImportError:

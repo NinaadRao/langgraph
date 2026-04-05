@@ -225,7 +225,12 @@ def test_create_agent_node_llm_input_messages():
 
     def pre_hook(state: StateWithLLMInput) -> dict:
         # Provide a trimmed view to the LLM without modifying stored messages
-        return {"llm_input_messages": [SystemMessage(content="trimmed"), state["messages"][-1]]}
+        return {
+            "llm_input_messages": [
+                SystemMessage(content="trimmed"),
+                state["messages"][-1],
+            ]
+        }
 
     workflow = StateGraph(StateWithLLMInput)
     workflow.add_node("pre_hook", pre_hook)
